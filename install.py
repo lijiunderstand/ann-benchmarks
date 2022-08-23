@@ -50,6 +50,7 @@ if __name__ == "__main__":
         'docker build \
         --rm -t ann-benchmarks -f install/Dockerfile .', shell=True)
 
+
     if args.algorithm:
         tags = [args.algorithm]
     elif os.getenv('LIBRARY'):

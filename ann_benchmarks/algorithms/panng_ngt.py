@@ -7,7 +7,7 @@ import subprocess
 import time
 from ann_benchmarks.algorithms.base import BaseANN
 from ann_benchmarks.constants import INDEX_DIR
-
+import multiprocessing
 
 class PANNG(BaseANN):
     def __init__(self, metric, object_type, param):
@@ -44,7 +44,7 @@ class PANNG(BaseANN):
                          distance_type=self._metric,
                          object_type=self._object_type)
             idx = ngtpy.Index(path=index)
-            idx.batch_insert(X, num_threads=24, debug=False)
+            idx.batch_insert(X, num_threads=multiprocessing.cpu_count(), debug=False)
             idx.save()
             idx.close()
             if self._pathadj_size > 0:

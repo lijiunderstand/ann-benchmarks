@@ -37,3 +37,10 @@ class KGraph(BaseANN):
         result = self._kgraph.search(
             numpy.array([v]), K=n, threads=1, P=self._P)
         return result[0]
+
+    # def batch_query(self, v, n):
+    #     if v.dtype != numpy.float32:
+    #         v = v.astype(numpy.float32)
+    #     result = self._kgraph.search(
+    #         numpy.array([v]), K=n, P=self._P)
+    #     self.res = result

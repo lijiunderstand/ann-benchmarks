@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import SPTAG
 from ann_benchmarks.algorithms.base import BaseANN
-
+import multiprocessing
 
 class Sptag(BaseANN):
     def __init__(self, metric, algo):
@@ -11,7 +11,7 @@ class Sptag(BaseANN):
 
     def fit(self, X):
         self._sptag = SPTAG.AnnIndex(self._algo, 'Float', X.shape[1])
-        self._sptag.SetBuildParam("NumberOfThreads", '32', "Index")
+        self._sptag.SetBuildParam("NumberOfThreads", 'multiprocessing.cpu_count()', "Index")
         self._sptag.SetBuildParam("DistCalcMethod", self._metric, "Index")
         self._sptag.Build(X, X.shape[0], False)
 

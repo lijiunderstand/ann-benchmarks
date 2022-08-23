@@ -4,6 +4,7 @@ import hnswlib
 import numpy as np
 from ann_benchmarks.constants import INDEX_DIR
 from ann_benchmarks.algorithms.base import BaseANN
+import multiprocessing
 
 
 class HnswLib(BaseANN):
@@ -20,17 +21,27 @@ class HnswLib(BaseANN):
         self.p.init_index(max_elements=len(X),
                           ef_construction=self.method_param["efConstruction"],
                           M=self.method_param["M"])
+        # self.p.set_num_threads(112)
         data_labels = np.arange(len(X))
         self.p.add_items(np.asarray(X), data_labels)
-        self.p.set_num_threads(1)
+        # self.p.set_num_threads(1)
+        self.p.set_num_threads(multiprocessing.cpu_count())
 
     def set_query_arguments(self, ef):
+        # self.p.set_num_threads(112)
         self.p.set_ef(ef)
 
     def query(self, v, n):
         # print(np.expand_dims(v,axis=0).shape)
         # print(self.p.knn_query(np.expand_dims(v,axis=0), k = n)[0])
+        # self.p.set_num_threads(112)
         return self.p.knn_query(np.expand_dims(v, axis=0), k=n)[0][0]
 
+    # def batch_query(self, X, n):
+    #     return self.p.knn_query(np.expand_dims(X, axis=0), k=n)[0][0]
+
+    def batch_query(self, X, n):
+        self.res = self.p.knn_query(X, k=n)[0]
+        
     def freeIndex(self):
         del self.p

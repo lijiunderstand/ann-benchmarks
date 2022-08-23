@@ -5,7 +5,7 @@ import numpy as np
 import struct
 import time
 from ann_benchmarks.algorithms.base import BaseANN
-
+import multiprocessing
 
 class Vamana(BaseANN):
     def __init__(self, metric, param):
@@ -22,7 +22,7 @@ class Vamana(BaseANN):
         self.params.set("C", 750)
         self.params.set("alpha", self.alpha)
         self.params.set("saturate_graph", False)
-        self.params.set("num_threads", 1)
+        self.params.set("num_threads", multiprocessing.cpu_count())
 
     def fit(self, X):
 
@@ -112,7 +112,7 @@ class VamanaPQ(BaseANN):
         self.params.set("alpha", self.alpha)
         self.params.set("saturate_graph", False)
         self.params.set("num_chunks", self.chunks)
-        self.params.set("num_threads", 1)
+        self.params.set("num_threads", multiprocessing.cpu_count())
 
     def fit(self, X):
 

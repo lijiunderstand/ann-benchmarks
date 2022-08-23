@@ -424,9 +424,67 @@ def lastfm(out_fn, n_dimensions, test_size=50000):
     # after that transformation a cosine lookup will return the same results
     # as the inner product on the untransformed data
     write_output(item_factors, user_factors, out_fn, 'angular')
+def reid_euclidean(out_fn):
+    feature_dim = 512
+    dataset_root = '/home/lijie/data/data/veri776_trainval/'
+    feature_path = '/home/lijie/data/data/veri776_trainval/'
+    feat_file = os.path.join(feature_path, 'features.bin')
+    meta_file = os.path.join(feature_path, 'meta.list')
+    with open(meta_file, 'r') as f:
+        lines = f.readlines()
+    meta_list = []
 
+    for ln in lines:
+        if ln.startswith('#'):
+            continue
+        tmp = ln.strip().split()
+        path = os.path.join(dataset_root, tmp[0])
+        vid = int(tmp[1])
+        camid = int(tmp[2])
+        meta_list.append([path, vid, camid])
+    features = numpy.fromfile(feat_file, dtype=numpy.float32, count=len(meta_list) * feature_dim)
+    features = features.reshape(-1, feature_dim)
+    # print('dataset size: %9d * %4d' % features.shape)
+    # print(features[0])
+    # print(features[1])
+    # print(features[1999])
+
+    X_train, X_test = train_test_split(features, test_size=10)
+    # write_output(X_train, X_test, out_fn + "-angular.hdf5", 'angular')
+    write_output(X_train, X_test, out_fn, 'euclidean')
+
+def reid_angular(out_fn):
+    feature_dim = 512
+    dataset_root = '/home/lijie/data/data/veri776_trainval/'
+    feature_path = '/home/lijie/data/data/veri776_trainval/'
+    feat_file = os.path.join(feature_path, 'features.bin')
+    meta_file = os.path.join(feature_path, 'meta.list')
+    with open(meta_file, 'r') as f:
+        lines = f.readlines()
+    meta_list = []
+
+    for ln in lines:
+        if ln.startswith('#'):
+            continue
+        tmp = ln.strip().split()
+        path = os.path.join(dataset_root, tmp[0])
+        vid = int(tmp[1])
+        camid = int(tmp[2])
+        meta_list.append([path, vid, camid])
+    features = numpy.fromfile(feat_file, dtype=numpy.float32, count=len(meta_list) * feature_dim)
+    features = features.reshape(-1, feature_dim)
+    # print('dataset size: %9d * %4d' % features.shape)
+    # print(features[0])
+    # print(features[1])
+    # print(features[1999])
+
+    X_train, X_test = train_test_split(features, test_size=10000)
+    # write_output(X_train, X_test, out_fn + "-angular.hdf5", 'angular')
+    write_output(X_train, X_test, out_fn, 'angular')
 
 DATASETS = {
+    'reid-image-512-euclidean': reid_euclidean,
+    'reid-image-512-angular': reid_angular,
     'deep-image-96-angular': deep_image,
     'fashion-mnist-784-euclidean': fashion_mnist,
     'gist-960-euclidean': gist,

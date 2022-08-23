@@ -32,3 +32,6 @@ class Scann(BaseANN):
 
   def query(self, v, n):
     return self.searcher.search(v, n, self.reorder, self.leaves_to_search)[0]
+
+  def batch_query(self, X, n):
+    self.res = self.searcher.search_batched(X, n, self.reorder, self.leaves_to_search)[0]

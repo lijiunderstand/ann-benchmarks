@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 import n2
 from ann_benchmarks.algorithms.base import BaseANN
-
+import multiprocessing
 
 class N2(BaseANN):
     def __init__(self, metric, method_param):
@@ -9,7 +9,7 @@ class N2(BaseANN):
         self._m = method_param['M']
         self._m0 = self._m * 2
         self._ef_construction = method_param['efConstruction']
-        self._n_threads = 1
+        self._n_threads = multiprocessing.cpu_count()
         self._ef_search = -1
 
     def fit(self, X):
@@ -23,6 +23,10 @@ class N2(BaseANN):
 
     def query(self, v, n):
         return self._n2.search_by_vector(v, n, self._ef_search)
+
+
+    def batch_query(self, X, n):
+        self.res = self._n2.batch_search_by_vectors(X, n, self._ef_search, num_threads =multiprocessing.cpu_count())
 
     def __str__(self):
         return "N2 (M%d_efCon%d)" % (self._m, self._ef_construction)

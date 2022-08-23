@@ -1,4 +1,7 @@
+
 FROM centos:7
+ENV http_proxy="http://child-prc.intel.com:913"
+ENV https_proxy="http://child-prc.intel.com:913"
 
 RUN yum -y install epel-release && \
     yum -y install centos-release-scl && \

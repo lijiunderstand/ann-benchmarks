@@ -1,10 +1,23 @@
 FROM ann-benchmarks
 
-RUN apt-get install -y python-setuptools python-pip
+RUN apt-get install -y python-setuptools python-pip wget unzip 
 RUN pip3 install pybind11 numpy setuptools
-RUN git clone https://github.com/nmslib/hnsw.git;cd hnsw; git checkout denorm
+# RUN git clone https://github.com/nmslib/hnsw.git;cd hnsw; git checkout denorm
+RUN git clone https://github.com/nmslib/hnsw.git;cd hnsw;git checkout master
 
 RUN cd hnsw/python_bindings; python3 setup.py install
-
 RUN python3 -c 'import hnswlib'
+## RUN pip3 install hnswlib==0.6.2
+
+
+
+# RUN wget https://github.com/nmslib/hnswlib/archive/refs/tags/v0.5.2.zip
+# RUN ls
+# RUN unzip v0.5.2.zip
+# RUN mv hnswlib-0.5.2 hnswlib
+
+# RUN cd hnswlib/python_bindings; python3 setup.py install
+
+
+# RUN python3 -c 'import hnswlib'
 

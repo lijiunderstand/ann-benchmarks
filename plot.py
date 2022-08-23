@@ -75,7 +75,8 @@ def create_plot(all_data, raw, x_scale, y_scale, xn, yn, fn_out, linestyles,
     # Logit scale has to be a subset of (0,1)
     if 'lim' in xm and x_scale != 'logit':
         x0, x1 = xm['lim']
-        plt.xlim(max(x0,0), min(x1,1))
+        # plt.xlim(max(x0,0), min(x1,1))
+        plt.xlim(max(x0,0.8), min(x1,1))  #edit for plot range change
     elif x_scale == 'logit':
         plt.xlim(min_x, max_x)
     if 'lim' in ym:

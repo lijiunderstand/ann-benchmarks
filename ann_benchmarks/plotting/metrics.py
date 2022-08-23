@@ -79,6 +79,8 @@ def rel(dataset_distances, run_distances, metrics):
 def queries_per_second(queries, attrs):
     return 1.0 / attrs["best_search_time"]
 
+def best_search_time(queries, attrs):
+    return  attrs["best_search_time"]
 
 def index_size(queries, attrs):
     # TODO(erikbern): should replace this with peak memory usage or something
@@ -124,6 +126,12 @@ all_metrics = {
         "function": lambda true_distances, run_distances, metrics, run_attrs: queries_per_second(true_distances, run_attrs),  # noqa
         "worst": float("-inf")
     },
+    "best_search_time": {
+        "description": "Best search time (s)",
+        "function": lambda true_distances, run_distances, metrics, run_attrs: best_search_time(true_distances,
+                                                                                               run_attrs),  # noqa
+        "worst": float("inf")
+    },    
     "distcomps": {
         "description": "Distance computations",
         "function": lambda true_distances, run_distances,  metrics, run_attrs: dist_computations(true_distances, run_attrs), # noqa

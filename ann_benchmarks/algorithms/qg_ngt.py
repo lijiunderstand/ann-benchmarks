@@ -7,6 +7,7 @@ import subprocess
 import time
 from ann_benchmarks.algorithms.base import BaseANN
 from ann_benchmarks.constants import INDEX_DIR
+import multiprocessing
 
 class QG(BaseANN):
     def __init__(self, metric, object_type, epsilon, param):
@@ -53,7 +54,7 @@ class QG(BaseANN):
                     '-T' + str(self._build_time_limit), anngIndex]
             subprocess.call(args)
             idx = ngtpy.Index(path=anngIndex)
-            idx.batch_insert(X, num_threads=24, debug=False)
+            idx.batch_insert(X, num_threads=multiprocessing.cpu_count(), debug=False)
             idx.save()
             idx.close()
             print('QG: ANNG construction time(sec)=' + str(time.time() - t))

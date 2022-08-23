@@ -5,7 +5,7 @@ import numpy as np
 from ann_benchmarks.constants import INDEX_DIR
 from ann_benchmarks.algorithms.base import BaseANN
 from ann_benchmarks.algorithms.faiss import Faiss
-
+import multiprocessing
 
 class FaissHNSW(Faiss):
     def __init__(self, metric, method_param):
@@ -23,7 +23,7 @@ class FaissHNSW(Faiss):
             X = X.astype(np.float32)
 
         self.index.add(X)
-        faiss.omp_set_num_threads(1)
+        faiss.omp_set_num_threads(multiprocessing.cpu_count())
 
     def set_query_arguments(self, ef):
         faiss.cvar.hnsw_stats.reset()
